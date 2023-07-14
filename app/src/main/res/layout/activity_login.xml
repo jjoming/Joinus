@@ -32,7 +32,7 @@
 
     <TextView
         android:id="@+id/text2"
-        android:fontFamily="@font/nanum_barun_gothic_light"
+        android:fontFamily="@font/nanum_barun_gothic"
         android:text="조인어스에 오신 것을 환영합니다!\n저희는 카카오 로그인만 제공하고 있습니다."
         android:textColor="@color/white"
         android:textSize="18sp"
