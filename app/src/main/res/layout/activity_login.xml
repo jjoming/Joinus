@@ -19,7 +19,7 @@
 
     <TextView
         android:id="@+id/text"
-        android:fontFamily="@font/nanum_barun_gothic"
+        android:fontFamily="@font/nanum_barun_gothic_bold"
         android:text="로그인"
         android:textColor="@color/white"
         android:textSize="36sp"
