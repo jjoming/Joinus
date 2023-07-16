@@ -68,7 +68,7 @@
         android:layout_height="wrap_content"
         android:scaleY="3"
         android:padding="12dp"
-        android:progressTint="@color/blue"
+        android:progressTint="@color/green"
         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
         app:layout_constraintTop_toBottomOf="@+id/text"
         app:layout_constraintLeft_toLeftOf="parent">
