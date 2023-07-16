@@ -140,6 +140,13 @@
         </TableRow>
     </TableLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/dark_gray"
+        app:layout_constraintTop_toBottomOf="@+id/tableLayout"
+        app:layout_constraintLeft_toLeftOf="parent"/>
+
     <TextView
         android:id="@+id/text2"
         android:fontFamily="@font/nanum_barun_gothic"
