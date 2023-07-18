@@ -38,6 +38,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="12dp"
             android:layout_gravity="right"
+            android:src="@drawable/icon_ticket"
             android:background="@color/green"
             tools:ignore="ContentDescription" />
     </Toolbar>
