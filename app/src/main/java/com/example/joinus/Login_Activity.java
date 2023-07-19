@@ -85,7 +85,6 @@ public class Login_Activity extends AppCompatActivity {
             return null;
         });
     }
-
     public static String getKeyHash(final Context context) {
         PackageManager pm = context.getPackageManager();
         try {
