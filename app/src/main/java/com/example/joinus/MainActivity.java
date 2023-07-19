@@ -29,9 +29,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import android.util.Log;
+import android.widget.TextView;
+
 public class MainActivity extends AppCompatActivity {
     ImageButton myPage;
     GridView gridView;
+    TextView user_name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,11 +55,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        user_name = findViewById(R.id.user_name);
+        Intent inIntent = getIntent();
+        String userN = inIntent.getStringExtra("name");
+        user_name.setText(userN + "님");
+
         // gridView에 어댑터 설정
         gridView = findViewById(R.id.gridView);
         GridAdapter adapter = new GridAdapter(MainActivity.this, imgBtnIds);
         gridView.setAdapter(adapter);
     }
-
-
 }
