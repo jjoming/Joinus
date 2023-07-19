@@ -18,16 +18,17 @@ import com.kakao.sdk.user.UserApiClient;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+
 public class Login_Activity extends AppCompatActivity {
 
-    ImageButton btnKakao;
+    ImageButton btnKakao; String name;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         btnKakao = findViewById(R.id.btn_kakao);
 //          <-- 키 해시 구하기 -->
-                Log.d("getKeyHash", ""+getKeyHash(Login_Activity.this));
+        Log.d("getKeyHash", ""+getKeyHash(Login_Activity.this));
         btnKakao.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
@@ -76,9 +77,12 @@ public class Login_Activity extends AppCompatActivity {
                 Log.i(TAG, "로그인 완료");
                 Log.i(TAG, "사용자 정보 요청 성공" +
                         "\n회원번호: " + user.getId() +
-                        "\n이메일: " + user.getKakaoAccount().getEmail());
+                        "\n이메일: " + user.getKakaoAccount().getEmail() +
+                        "\n이름: " + user.getKakaoAccount().getProfile().getNickname());
+                name = user.getKakaoAccount().getProfile().getNickname();
                 // 로그인 성공 후 MainActivity로 전환하는 코드 추가
                 Intent intent = new Intent(Login_Activity.this, MainActivity.class);
+                intent.putExtra("name", name);
                 startActivity(intent);
                 finish(); // 현재 액티비티를 종료하여 뒤로 가기 버튼으로 다시 돌아오지 않도록 합니다.
             }
