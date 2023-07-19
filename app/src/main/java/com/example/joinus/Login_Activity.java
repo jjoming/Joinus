@@ -69,17 +69,12 @@ public class Login_Activity extends AppCompatActivity {
                         "\n회원번호: " + user.getId() +
                         "\n이메일: " + user.getKakaoAccount().getEmail());
                 // 로그인 성공 후 MainActivity로 전환하는 코드 추가
-                moveToMainActivity();
+                Intent intent = new Intent(Login_Activity.this, MainActivity.class);
+                startActivity(intent);
+                finish(); // 현재 액티비티를 종료하여 뒤로 가기 버튼으로 다시 돌아오지 않도록 합니다.
             }
             return null;
         });
-    }
-
-    private void moveToMainActivity() {
-        // MainActivity로 전환하는 코드 추가
-        Intent intent = new Intent(Login_Activity.this, MainActivity.class);
-        startActivity(intent);
-        finish(); // 현재 액티비티를 종료하여 뒤로 가기 버튼으로 다시 돌아오지 않도록 합니다.
     }
 
 }
