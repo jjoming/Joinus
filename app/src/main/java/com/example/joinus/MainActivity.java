@@ -37,8 +37,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-//        <-- 키 해시 구하기 -->
-        Log.d("getKeyHash", ""+getKeyHash(MainActivity.this));
+//
 
         int[] imgBtnIds = {R.drawable.btn_ride_bike, R.drawable.btn_plastic_label, R.drawable.btn_transport,
                 R.drawable.btn_power_off, R.drawable.btn_phone, R.drawable.btn_use_tumbler, R.drawable.btn_empty_mail,
@@ -59,24 +58,5 @@ public class MainActivity extends AppCompatActivity {
         gridView.setAdapter(adapter);
     }
 
-    public static String getKeyHash(final Context context) {
-        PackageManager pm = context.getPackageManager();
-        try {
-            PackageInfo packageInfo = pm.getPackageInfo(context.getPackageName(), PackageManager.GET_SIGNATURES);
-            if(packageInfo == null)
-                return null;
-            for (Signature signature : packageInfo.signatures) {
-                try {
-                    MessageDigest md = MessageDigest.getInstance("SHA");
-                    md.update(signature.toByteArray());
-                    return android.util.Base64.encodeToString(md.digest(), android.util.Base64.NO_WRAP);
-                } catch (NoSuchAlgorithmException e) {
-                    e.printStackTrace();
-                }
-            }
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
+
 }

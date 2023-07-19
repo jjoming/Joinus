@@ -1,6 +1,10 @@
 package com.example.joinus;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -11,6 +15,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.kakao.sdk.user.UserApiClient;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 public class Login_Activity extends AppCompatActivity {
 
     ImageButton btnKakao;
@@ -19,6 +26,8 @@ public class Login_Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         btnKakao = findViewById(R.id.btn_kakao);
+//          <-- 키 해시 구하기 -->
+                Log.d("getKeyHash", ""+getKeyHash(Login_Activity.this));
         btnKakao.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
@@ -75,6 +84,27 @@ public class Login_Activity extends AppCompatActivity {
             }
             return null;
         });
+    }
+
+    public static String getKeyHash(final Context context) {
+        PackageManager pm = context.getPackageManager();
+        try {
+            PackageInfo packageInfo = pm.getPackageInfo(context.getPackageName(), PackageManager.GET_SIGNATURES);
+            if(packageInfo == null)
+                return null;
+            for (Signature signature : packageInfo.signatures) {
+                try {
+                    MessageDigest md = MessageDigest.getInstance("SHA");
+                    md.update(signature.toByteArray());
+                    return android.util.Base64.encodeToString(md.digest(), android.util.Base64.NO_WRAP);
+                } catch (NoSuchAlgorithmException e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }
