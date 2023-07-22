@@ -36,6 +36,7 @@ public class MyPage_Activity extends AppCompatActivity {
             imgViews[i] = findViewById(imgID[i]);
         }
 
+        // 데이터베이스에서 스탬프 개수 불러와서 UI 업데이트
         sqlDB = dbHelper.getReadableDatabase();
         Cursor cursor;
         cursor = sqlDB.rawQuery("SELECT " + TableInfo_user.TABLE_3_COLUMN_NAME_STAMP + " FROM " + TableInfo_user.TABLE_3_NAME,null);
