@@ -53,15 +53,24 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
+        dbHelper = new JoinusDBHelper(this);
         int[] imgBtnIds = {R.drawable.btn_ride_bike, R.drawable.btn_plastic_label, R.drawable.btn_transport,
                 R.drawable.btn_power_off, R.drawable.btn_phone, R.drawable.btn_use_tumbler, R.drawable.btn_empty_mail,
                 R.drawable.btn_use_bag, R.drawable.btn_laundry, R.drawable.btn_food};
-        int[] imgViewIds = {R.drawable.icon_check_circle_outline, R.drawable.icon_check_circle_outline, R.drawable.icon_check_circle_outline,
+        /* int[] imgViewIds = {R.drawable.icon_check_circle_outline, R.drawable.icon_check_circle_outline, R.drawable.icon_check_circle_outline,
                 R.drawable.icon_check_circle_outline, R.drawable.icon_check_circle_outline, R.drawable.icon_check_circle_outline,
                 R.drawable.icon_check_circle_outline, R.drawable.icon_check_circle_outline, R.drawable.icon_check_circle_outline,
-                R.drawable.icon_check_circle_outline};
-
+                R.drawable.icon_check_circle_outline}; */
+        String[] imgViewSQL = {TableInfo_user.TABLE_2_COLUMN_NAME_BICYCLE,
+                TableInfo_user.TABLE_2_COLUMN_NAME_LABEL,
+                TableInfo_user.TABLE_2_COLUMN_NAME_BUS,
+                TableInfo_user.TABLE_2_COLUMN_NAME_OFF,
+                TableInfo_user.TABLE_2_COLUMN_NAME_SMARTPHONE,
+                TableInfo_user.TABLE_2_COLUMN_NAME_TUMBLER,
+                TableInfo_user.TABLE_2_COLUMN_NAME_MAIL,
+                TableInfo_user.TABLE_2_COLUMN_NAME_BASKET,
+                TableInfo_user.TABLE_2_COLUMN_NAME_LAUNDRY,
+                TableInfo_user.TABLE_2_COLUMN_NAME_FOOD};
 
         myPage = findViewById(R.id.myPage);
         myPage.setOnClickListener(new View.OnClickListener() {
@@ -90,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
 
         // gridView에 어댑터 설정
         gridView = findViewById(R.id.gridView);
-        adapter = new GridAdapter(MainActivity.this, imgBtnIds, imgViewIds);
+        adapter = new GridAdapter(MainActivity.this, imgBtnIds, imgViewSQL);
         gridView.setAdapter(adapter);
         int requestCode = 101;
         adapter.setRequestCode(requestCode);
