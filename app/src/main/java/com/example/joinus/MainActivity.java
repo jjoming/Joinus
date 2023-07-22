@@ -139,8 +139,8 @@ public class MainActivity extends AppCompatActivity implements OnButtonClickList
 
     // 퍼센테이지 업데이트 메서드
     private void updatePercentage() {
-        goal += 10;
         if (goal == 100) {
+            goal += 10;
             percent.setText(goal + "%");
             progressbar.setProgress(goal);
 
@@ -165,6 +165,7 @@ public class MainActivity extends AppCompatActivity implements OnButtonClickList
 
         }
         else {
+            goal += 10;
             percent.setText(goal + "%");
             progressbar.setProgress(goal);
         }
