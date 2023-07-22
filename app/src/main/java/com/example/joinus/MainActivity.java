@@ -113,11 +113,8 @@ public class MainActivity extends AppCompatActivity {
 
         if (requestCode == CAMERA_PERMISSION_REQUEST_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // 카메라 권한이 허용된 경우, 다시 capture() 메서드를 호출하여 카메라 앱을 실행합니다.
                 adapter.capture();
             } else {
-                // 카메라 권한이 거부된 경우, 사용자에게 권한이 필요하다는 안내 메시지를 표시할 수 있습니다.
-                // 필요에 따라 다른 조치를 취할 수도 있습니다.
                 Toast.makeText(this, "카메라 권한이 필요합니다.", Toast.LENGTH_SHORT).show();
             }
         }
