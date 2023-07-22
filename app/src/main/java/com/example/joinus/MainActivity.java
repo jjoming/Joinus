@@ -130,11 +130,17 @@ public class MainActivity extends AppCompatActivity implements OnButtonClickList
     // 퍼센테이지 업데이트 메서드
     private void updatePercentage() {
         goal += 10;
-        if (goal >= 100) {
+        if (goal == 100) {
+            percent.setText(goal + "%");
+            progressbar.setProgress(goal);
+            sqlDB = dbHelper.getWritableDatabase();
+            sqlDB.execSQL("INSERT INTO " + TableInfo_user.TABLE_3_NAME + " (" + TableInfo_user.TABLE_3_COLUMN_NAME_STAMP + ") VALUES (1);");
+            sqlDB.close();
+        }
+        else if (goal > 100) {
 
         }
         else {
-
             percent.setText(goal + "%");
             progressbar.setProgress(goal);
         }

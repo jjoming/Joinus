@@ -1,6 +1,8 @@
 package com.example.joinus;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -17,16 +19,32 @@ public class MyPage_Activity extends AppCompatActivity {
     ImageView[] imgViews;
     int[] imgID = {R.id.img1, R.id.img2, R.id.img3, R.id.img4, R.id.img5, R.id.img6, R.id.img7, R.id.img8};
 
+    JoinusDBHelper dbHelper;
+    SQLiteDatabase sqlDB;
+    int stampNum;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mypage);
 
         imgViews = new ImageView[imgID.length]; // 배열 초기화
+        dbHelper = new JoinusDBHelper(this);
 
-        //인플레이팅
+        // 인플레이팅
         for (int i = 0; i < imgID.length; i++) {
             imgViews[i] = findViewById(imgID[i]);
+        }
+
+        sqlDB = dbHelper.getReadableDatabase();
+        Cursor cursor;
+        cursor = sqlDB.rawQuery("SELECT " + TableInfo_user.TABLE_3_COLUMN_NAME_STAMP + " FROM " + TableInfo_user.TABLE_3_NAME,null);
+        while (cursor.moveToNext()) {
+            stampNum = cursor.getInt(0);
+        }
+
+        for (int i = 0; i < stampNum; i++) {
+            imgViews[i].setImageResource(R.drawable.stamp_true);
         }
 
         //TODO 툴바 뒤로가기 버튼
