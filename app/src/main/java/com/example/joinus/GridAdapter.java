@@ -130,7 +130,8 @@ public class GridAdapter extends BaseAdapter {
             }
         } else {
             // 카메라 권한이 허용되지 않은 경우 권한을 요청합니다.
-            ActivityCompat.requestPermissions((Activity) context, new String[]{android.Manifest.permission.CAMERA}, CAMERA_PERMISSION_REQUEST_CODE);
+            ActivityCompat.requestPermissions((Activity) context, new String[]{android.Manifest.permission.CAMERA},
+                    CAMERA_PERMISSION_REQUEST_CODE);
         }
     }
 

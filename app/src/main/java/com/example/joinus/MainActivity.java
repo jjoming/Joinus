@@ -146,7 +146,8 @@ public class MainActivity extends AppCompatActivity implements OnButtonClickList
 
             sqlDB = dbHelper.getReadableDatabase();
             Cursor cursor;
-            cursor = sqlDB.rawQuery("SELECT " + TableInfo_user.TABLE_3_COLUMN_NAME_STAMP + " FROM " + TableInfo_user.TABLE_3_NAME,null);
+            cursor = sqlDB.rawQuery("SELECT " + TableInfo_user.TABLE_3_COLUMN_NAME_STAMP + " FROM " +
+                    TableInfo_user.TABLE_3_NAME,null);
             while (cursor.moveToNext()) {
                 stampNum = cursor.getInt(0);
             }
@@ -155,7 +156,8 @@ public class MainActivity extends AppCompatActivity implements OnButtonClickList
             stampNum++;
 
             sqlDB = dbHelper.getWritableDatabase();
-            sqlDB.execSQL("INSERT INTO " + TableInfo_user.TABLE_3_NAME + " (" + TableInfo_user.TABLE_3_COLUMN_NAME_STAMP + ") VALUES (" + stampNum + ");");
+            sqlDB.execSQL("INSERT INTO " + TableInfo_user.TABLE_3_NAME + " (" + TableInfo_user.TABLE_3_COLUMN_NAME_STAMP +
+                    ") VALUES (" + stampNum + ");");
             sqlDB.close();
 
         }
