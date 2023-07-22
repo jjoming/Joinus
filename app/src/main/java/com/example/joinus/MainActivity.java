@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
 
         user_name = findViewById(R.id.user_name);
         Intent inIntent = getIntent();
-        // todo : 이름 데이터베이스에서 꺼내 표시
+        //이름 데이터베이스에서 꺼내 표시
         dbHelper = new JoinusDBHelper(this);
 
         sqlDB = dbHelper.getReadableDatabase();
