@@ -123,18 +123,21 @@ public class MainActivity extends AppCompatActivity implements OnButtonClickList
     // 인터페이스 메서드 구현
     @Override
     public void onButtonClick(int position) {
-        // 버튼이 눌렸을 때 UI 변경 로직을 여기에 작성합니다.
-        // 예를 들어, 이미지뷰의 이미지를 변경하거나 퍼센테이지를 업데이트하는 등의 작업을 수행합니다.
         adapter.handleImageButtonClick(position, R.drawable.icon_check_circle);
-        //adapter.notifyDataSetChanged(); // 어댑터에 변경된 데이터를 알려 UI 업데이트
         updatePercentage(); // 퍼센테이지 업데이트 메서드 호출
     }
 
     // 퍼센테이지 업데이트 메서드
     private void updatePercentage() {
         goal += 10;
-        percent.setText(goal + "%");
-        progressbar.setProgress(goal);
+        if (goal >= 100) {
+
+        }
+        else {
+
+            percent.setText(goal + "%");
+            progressbar.setProgress(goal);
+        }
     }
 
     // 이미지 캡처 결과를 받아오는 메서드
