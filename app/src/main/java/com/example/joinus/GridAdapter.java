@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.hardware.Camera;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -32,8 +33,6 @@ public class GridAdapter extends BaseAdapter {
     int[] imgViewIds; // 이미지뷰에 들어갈 그림의 아이디
     LayoutInflater inflater;
     File file;
-    ImageButton imgBtn;
-    ImageView imgView;
     private int requestCode;
     private static final int CAMERA_PERMISSION_REQUEST_CODE = 100;
 
@@ -68,8 +67,8 @@ public class GridAdapter extends BaseAdapter {
             convertView = inflater.inflate(R.layout.grid_item, null);
         }
 
-        imgBtn = convertView.findViewById(R.id.grid_btn);
-        imgView = convertView.findViewById(R.id.imgView); // 이미지뷰 인플레이트
+        ImageButton imgBtn = convertView.findViewById(R.id.grid_btn);
+        ImageView imgView = convertView.findViewById(R.id.imgView); // 이미지뷰 인플레이트
 
         File sdcard = Environment.getExternalStorageDirectory();
         file = new File(sdcard, "capture.jpg");
@@ -84,7 +83,7 @@ public class GridAdapter extends BaseAdapter {
             public void onClick(View view) {
                 // todo : 카메라로 이동 후 확인 버튼 클릭시 체크표시로
                 capture();
-                //handleImageButtonClick(position, imgView);
+                handleImageButtonClick(position, imgView);
             }
         });
 
@@ -96,10 +95,11 @@ public class GridAdapter extends BaseAdapter {
         this.requestCode = requestCode;
     }
 
-    private void handleImageButtonClick(ImageView imgView) {
-        //
+    private void handleImageButtonClick(int position, ImageView imgView) {
+
         imgView.setImageResource(R.drawable.icon_check_circle);
         // todo : 오늘의 목표 퍼센테이지 높이기
+
     }
 
     public void capture() {
@@ -118,7 +118,7 @@ public class GridAdapter extends BaseAdapter {
 
     public void setCapturedImage(Intent data) {
         if (data != null && data.getExtras() != null) {
-            handleImageButtonClick(imgView);
+            //handleImageButtonClick(imgView);
         }
     }
 }
