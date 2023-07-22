@@ -31,13 +31,6 @@ public class Login_Activity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         dbHelper = new JoinusDBHelper(this);
 
-        // 로그인 한 이력이 있으면 메인페이지로 이동
-        /*if (!dbHelper.hasData()) {
-            Intent intent = new Intent(Login_Activity.this, MainActivity.class);
-            startActivity(intent);
-            finish();
-        } */
-
         btnKakao = findViewById(R.id.btn_kakao);
 //          <-- 키 해시 구하기 -->
         Log.d("getKeyHash", ""+getKeyHash(Login_Activity.this));

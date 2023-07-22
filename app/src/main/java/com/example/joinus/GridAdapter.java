@@ -6,6 +6,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.hardware.Camera;
@@ -13,6 +15,7 @@ import android.media.Image;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,16 +34,23 @@ public class GridAdapter extends BaseAdapter {
     Context context;
     int[] imgIds; // 이미지 버튼에 들어갈 그림의 아이디
     int[] imgViewIds; // 이미지뷰에 들어갈 그림의 아이디
+    String[] imgViewSQL;
     LayoutInflater inflater;
     File file;
     private int requestCode;
     private static final int CAMERA_PERMISSION_REQUEST_CODE = 100;
 
+    JoinusDBHelper dbHelper;
+    SQLiteDatabase sqlDB;
 
-    public GridAdapter(Context context, int[] imgIds, int[] imgViewIds) {
+    public GridAdapter(Context context, int[] imgIds, String[] imgViewSQL) {
         this.context = context;
         this.imgIds = imgIds;
-        this.imgViewIds = imgViewIds;
+        //this.imgViewIds = imgViewIds;
+        this.imgViewSQL = imgViewSQL;
+
+        dbHelper = new JoinusDBHelper(context);
+        //setImageViewsFromDatabase();
     }
 
     @Override
@@ -75,8 +85,37 @@ public class GridAdapter extends BaseAdapter {
         file = new File(sdcard, "capture.jpg");
 
         imgBtn.setImageResource(imgIds[position]);
-        //imgView.setImageResource(R.drawable.your_image_resource); // 이미지뷰에 원하는 이미지 설정
-        imgView.setImageResource(imgViewIds[position]);
+
+        // 데이터베이스에서 해당 위치에 대한 값 가져오기
+        sqlDB = dbHelper.getReadableDatabase();
+        String countQuery = "SELECT " + imgViewSQL[position] + " FROM " + TableInfo_user.TABLE_2_NAME;
+        Cursor cursor = sqlDB.rawQuery(countQuery, null);
+        if (cursor.moveToFirst()) {
+            int count = cursor.getInt(0);
+            // 데이터베이스 값에 따라 이미지뷰 설정
+            if (count == 1) {
+                imgView.setImageResource(R.drawable.icon_check_circle);
+            } else {
+                imgView.setImageResource(R.drawable.icon_check_circle_outline);
+            }
+        }
+        cursor.close();
+        sqlDB.close();
+
+
+
+        /* //todo : 만약에 sql data가 1일경우 이미지 바꾸기
+        for (int i = 0; i < imgViewIds.length; i++) {
+            sqlDB = dbHelper.getReadableDatabase();  // 읽기전용 데이터 베이스 가져오기
+            String countQuery = "SELECT " + imgViewSQL[i] + " FROM " + TableInfo_user.TABLE_2_NAME + ";";
+            Cursor cursor = sqlDB.rawQuery(countQuery, null); // 쿼리를 실행하고 커서로 가져옴
+            cursor.moveToFirst();
+            int count = cursor.getInt(0);
+            cursor.close();
+            if (count == 1) {
+                imgViewIds[i] = R.drawable.icon_check_circle;
+            }
+        } */
 
         // ImageButton에 OnClickListener 설정
         imgBtn.setOnClickListener(new View.OnClickListener() {
@@ -85,12 +124,30 @@ public class GridAdapter extends BaseAdapter {
                 // todo : 카메라로 이동 후 확인 버튼 클릭시 체크표시로
                 capture();
                 handleImageButtonClick(position, imgView);
+
             }
         });
 
         return convertView;
     }
 
+    /* private void setImageViewsFromDatabase() {
+        sqlDB = dbHelper.getReadableDatabase();
+        for (int i = 0; i < imgViewIds.length; i++) {
+            String countQuery = "SELECT " + imgViewSQL[i] + " FROM " + TableInfo_user.TABLE_2_NAME + ";";
+            Cursor cursor = sqlDB.rawQuery(countQuery, null);
+            if (cursor.moveToFirst()) {
+                int count = cursor.getInt(0);
+                cursor.close();
+                if (count == 1) {
+                    imgViewIds[i] = R.drawable.icon_check_circle;
+                }
+            } else {
+                cursor.close();
+            }
+        }
+        sqlDB.close();
+    } */
 
     public void setRequestCode(int requestCode) {
         this.requestCode = requestCode;
@@ -99,6 +156,11 @@ public class GridAdapter extends BaseAdapter {
     private void handleImageButtonClick(int position, ImageView imgView) {
 
         imgView.setImageResource(R.drawable.icon_check_circle);
+        // 데이터베이스에 변경된 값을 반영
+        sqlDB = dbHelper.getWritableDatabase();
+        String updateQuery = "UPDATE " + TableInfo_user.TABLE_2_NAME + " SET " + imgViewSQL[position] + " = 1;";
+        sqlDB.execSQL(updateQuery);
+        sqlDB.close();
         // todo : 오늘의 목표 퍼센테이지 높이기
 
     }
