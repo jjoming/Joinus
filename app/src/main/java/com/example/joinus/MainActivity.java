@@ -34,19 +34,24 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import android.util.Log;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements OnButtonClickListener {
     private static final int CAMERA_PERMISSION_REQUEST_CODE = 100;
     ImageButton myPage;
     GridView gridView;
     TextView user_name;
     JoinusDBHelper dbHelper;
     SQLiteDatabase sqlDB;
-    String userN;
+    String userN, per = "0";
 
     GridAdapter adapter;
+    TextView percent;
+    ProgressBar progressbar;
+    int[] imgViewIds;
+    int goal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,10 +62,10 @@ public class MainActivity extends AppCompatActivity {
         int[] imgBtnIds = {R.drawable.btn_ride_bike, R.drawable.btn_plastic_label, R.drawable.btn_transport,
                 R.drawable.btn_power_off, R.drawable.btn_phone, R.drawable.btn_use_tumbler, R.drawable.btn_empty_mail,
                 R.drawable.btn_use_bag, R.drawable.btn_laundry, R.drawable.btn_food};
-        /* int[] imgViewIds = {R.drawable.icon_check_circle_outline, R.drawable.icon_check_circle_outline, R.drawable.icon_check_circle_outline,
+        int[] imgViewIds = {R.drawable.icon_check_circle_outline, R.drawable.icon_check_circle_outline, R.drawable.icon_check_circle_outline,
                 R.drawable.icon_check_circle_outline, R.drawable.icon_check_circle_outline, R.drawable.icon_check_circle_outline,
                 R.drawable.icon_check_circle_outline, R.drawable.icon_check_circle_outline, R.drawable.icon_check_circle_outline,
-                R.drawable.icon_check_circle_outline}; */
+                R.drawable.icon_check_circle_outline};
         String[] imgViewSQL = {TableInfo_user.TABLE_2_COLUMN_NAME_BICYCLE,
                 TableInfo_user.TABLE_2_COLUMN_NAME_LABEL,
                 TableInfo_user.TABLE_2_COLUMN_NAME_BUS,
@@ -95,14 +100,41 @@ public class MainActivity extends AppCompatActivity {
         user_name.setText(userN + "님");
 
         cursor.close();
+
+        percent = findViewById(R.id.percent);
+        progressbar = findViewById(R.id.progressbar);
+        cursor = sqlDB.rawQuery("SELECT " + TableInfo_user.TABLE_2_COLUMN_NAME_GOAL + " FROM " + TableInfo_user.TABLE_2_NAME,null);
+        while (cursor.moveToNext()) {
+            per = cursor.getString(0);
+        }
+        percent.setText(per + "%");
+        goal = Integer.parseInt(per);
         sqlDB.close();
 
         // gridView에 어댑터 설정
         gridView = findViewById(R.id.gridView);
-        adapter = new GridAdapter(MainActivity.this, imgBtnIds, imgViewSQL);
+        adapter = new GridAdapter(MainActivity.this, imgBtnIds, imgViewIds, imgViewSQL);
+        adapter.setOnButtonClickListener(this); // 인터페이스 리스너 설정
         gridView.setAdapter(adapter);
         int requestCode = 101;
         adapter.setRequestCode(requestCode);
+    }
+
+    // 인터페이스 메서드 구현
+    @Override
+    public void onButtonClick(int position) {
+        // 버튼이 눌렸을 때 UI 변경 로직을 여기에 작성합니다.
+        // 예를 들어, 이미지뷰의 이미지를 변경하거나 퍼센테이지를 업데이트하는 등의 작업을 수행합니다.
+        //imgViewIds[position] = R.drawable.icon_check_circle;
+        adapter.notifyDataSetChanged(); // 어댑터에 변경된 데이터를 알려 UI 업데이트
+        updatePercentage(); // 퍼센테이지 업데이트 메서드 호출
+    }
+
+    // 퍼센테이지 업데이트 메서드
+    private void updatePercentage() {
+        goal += 10;
+        percent.setText(goal + "%");
+        progressbar.setProgress(goal);
     }
 
     // 이미지 캡처 결과를 받아오는 메서드
