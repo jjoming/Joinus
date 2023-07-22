@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import android.util.Log;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
     SQLiteDatabase sqlDB;
     String userN;
 
+    ProgressBar pbar;
     GridAdapter adapter;
 
     @Override
@@ -62,6 +64,9 @@ public class MainActivity extends AppCompatActivity {
                 R.drawable.icon_check_circle_outline, R.drawable.icon_check_circle_outline, R.drawable.icon_check_circle_outline,
                 R.drawable.icon_check_circle_outline};
 
+        ProgressBar pbar;
+        pbar = findViewById(R.id.progressbar);
+        pbar.setProgress(0);
 
         myPage = findViewById(R.id.myPage);
         myPage.setOnClickListener(new View.OnClickListener() {
