@@ -43,10 +43,16 @@ public class GridAdapter extends BaseAdapter {
     JoinusDBHelper dbHelper;
     SQLiteDatabase sqlDB;
 
-    public GridAdapter(Context context, int[] imgIds, String[] imgViewSQL) {
+    private OnButtonClickListener onButtonClickListener;
+
+    public void setOnButtonClickListener(OnButtonClickListener listener) {
+        this.onButtonClickListener = listener;
+    }
+
+    public GridAdapter(Context context, int[] imgIds, int[] imgViewIds, String[] imgViewSQL) {
         this.context = context;
         this.imgIds = imgIds;
-        //this.imgViewIds = imgViewIds;
+        this.imgViewIds = imgViewIds;
         this.imgViewSQL = imgViewSQL;
 
         dbHelper = new JoinusDBHelper(context);
@@ -87,36 +93,23 @@ public class GridAdapter extends BaseAdapter {
         imgBtn.setImageResource(imgIds[position]);
 
         // 데이터베이스에서 해당 위치에 대한 값 가져오기
-        //todo : 만약에 sql data가 1일경우 이미지 바꾸기
-        sqlDB = dbHelper.getReadableDatabase();
-        String countQuery = "SELECT " + imgViewSQL[position] + " FROM " + TableInfo_user.TABLE_2_NAME;
-        Cursor cursor = sqlDB.rawQuery(countQuery, null);
-        if (cursor.moveToFirst()) {
-            int count = cursor.getInt(0);
-            // 데이터베이스 값에 따라 이미지뷰 설정
-            if (count == 1) {
-                imgView.setImageResource(R.drawable.icon_check_circle);
-            } else {
-                imgView.setImageResource(R.drawable.icon_check_circle_outline);
-            }
-        }
-        cursor.close();
-        sqlDB.close();
+        // todo : 만약에 sql data가 1일 경우 이미지 바꾸기
+        imgView.setImageResource(imgViewIds[position]);
 
         // ImageButton에 OnClickListener 설정
         imgBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // todo : 카메라로 이동 후 확인 버튼 클릭시 체크표시로
                 capture();
                 handleImageButtonClick(position, imgView);
-
+                if (onButtonClickListener != null) {
+                    onButtonClickListener.onButtonClick(position); // 버튼 클릭 이벤트를 메인 액티비티로 전달
+                }
             }
         });
 
         return convertView;
     }
-
 
     public void setRequestCode(int requestCode) {
         this.requestCode = requestCode;
@@ -150,7 +143,7 @@ public class GridAdapter extends BaseAdapter {
 
     public void setCapturedImage(Intent data) {
         if (data != null && data.getExtras() != null) {
-            //handleImageButtonClick(imgView);
+
         }
     }
 }
