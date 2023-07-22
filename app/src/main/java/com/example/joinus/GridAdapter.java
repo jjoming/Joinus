@@ -87,6 +87,7 @@ public class GridAdapter extends BaseAdapter {
         imgBtn.setImageResource(imgIds[position]);
 
         // 데이터베이스에서 해당 위치에 대한 값 가져오기
+        //todo : 만약에 sql data가 1일경우 이미지 바꾸기
         sqlDB = dbHelper.getReadableDatabase();
         String countQuery = "SELECT " + imgViewSQL[position] + " FROM " + TableInfo_user.TABLE_2_NAME;
         Cursor cursor = sqlDB.rawQuery(countQuery, null);
@@ -102,21 +103,6 @@ public class GridAdapter extends BaseAdapter {
         cursor.close();
         sqlDB.close();
 
-
-
-        /* //todo : 만약에 sql data가 1일경우 이미지 바꾸기
-        for (int i = 0; i < imgViewIds.length; i++) {
-            sqlDB = dbHelper.getReadableDatabase();  // 읽기전용 데이터 베이스 가져오기
-            String countQuery = "SELECT " + imgViewSQL[i] + " FROM " + TableInfo_user.TABLE_2_NAME + ";";
-            Cursor cursor = sqlDB.rawQuery(countQuery, null); // 쿼리를 실행하고 커서로 가져옴
-            cursor.moveToFirst();
-            int count = cursor.getInt(0);
-            cursor.close();
-            if (count == 1) {
-                imgViewIds[i] = R.drawable.icon_check_circle;
-            }
-        } */
-
         // ImageButton에 OnClickListener 설정
         imgBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -131,23 +117,6 @@ public class GridAdapter extends BaseAdapter {
         return convertView;
     }
 
-    /* private void setImageViewsFromDatabase() {
-        sqlDB = dbHelper.getReadableDatabase();
-        for (int i = 0; i < imgViewIds.length; i++) {
-            String countQuery = "SELECT " + imgViewSQL[i] + " FROM " + TableInfo_user.TABLE_2_NAME + ";";
-            Cursor cursor = sqlDB.rawQuery(countQuery, null);
-            if (cursor.moveToFirst()) {
-                int count = cursor.getInt(0);
-                cursor.close();
-                if (count == 1) {
-                    imgViewIds[i] = R.drawable.icon_check_circle;
-                }
-            } else {
-                cursor.close();
-            }
-        }
-        sqlDB.close();
-    } */
 
     public void setRequestCode(int requestCode) {
         this.requestCode = requestCode;
