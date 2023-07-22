@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
@@ -35,16 +37,24 @@ public class MainActivity extends AppCompatActivity {
     ImageButton myPage;
     GridView gridView;
     TextView user_name;
+    JoinusDBHelper dbHelper;
+    SQLiteDatabase sqlDB;
+    String userN;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-//
+
 
         int[] imgBtnIds = {R.drawable.btn_ride_bike, R.drawable.btn_plastic_label, R.drawable.btn_transport,
                 R.drawable.btn_power_off, R.drawable.btn_phone, R.drawable.btn_use_tumbler, R.drawable.btn_empty_mail,
                 R.drawable.btn_use_bag, R.drawable.btn_laundry, R.drawable.btn_food};
+        int[] imgViewIds = {R.drawable.icon_check_circle_outline, R.drawable.icon_check_circle_outline, R.drawable.icon_check_circle_outline,
+                R.drawable.icon_check_circle_outline, R.drawable.icon_check_circle_outline, R.drawable.icon_check_circle_outline,
+                R.drawable.icon_check_circle_outline, R.drawable.icon_check_circle_outline, R.drawable.icon_check_circle_outline,
+                R.drawable.icon_check_circle_outline};
+
 
         myPage = findViewById(R.id.myPage);
         myPage.setOnClickListener(new View.OnClickListener() {
@@ -57,12 +67,23 @@ public class MainActivity extends AppCompatActivity {
 
         user_name = findViewById(R.id.user_name);
         Intent inIntent = getIntent();
-        String userN = inIntent.getStringExtra("name");
+        // todo : 이름 데이터베이스에서 꺼내 표시
+        dbHelper = new JoinusDBHelper(this);
+
+        sqlDB = dbHelper.getReadableDatabase();
+        Cursor cursor;
+        cursor = sqlDB.rawQuery("SELECT " + TableInfo_user.TABLE_1_COLUMN_NAME_NAME + " FROM " + TableInfo_user.TABLE_1_NAME,null);
+        while (cursor.moveToNext()) {
+            userN = cursor.getString(0);
+        }
         user_name.setText(userN + "님");
+
+        cursor.close();
+        sqlDB.close();
 
         // gridView에 어댑터 설정
         gridView = findViewById(R.id.gridView);
-        GridAdapter adapter = new GridAdapter(MainActivity.this, imgBtnIds);
+        GridAdapter adapter = new GridAdapter(MainActivity.this, imgBtnIds, imgViewIds);
         gridView.setAdapter(adapter);
     }
 }

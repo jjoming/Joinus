@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -21,11 +22,22 @@ import java.security.NoSuchAlgorithmException;
 
 public class Login_Activity extends AppCompatActivity {
 
+    private JoinusDBHelper dbHelper;
     ImageButton btnKakao; String name;
+    SQLiteDatabase sqlDB;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        dbHelper = new JoinusDBHelper(this);
+
+        // 로그인 한 이력이 있으면 메인페이지로 이동
+        /*if (!dbHelper.hasData()) {
+            Intent intent = new Intent(Login_Activity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        } */
+
         btnKakao = findViewById(R.id.btn_kakao);
 //          <-- 키 해시 구하기 -->
         Log.d("getKeyHash", ""+getKeyHash(Login_Activity.this));
@@ -70,6 +82,9 @@ public class Login_Activity extends AppCompatActivity {
 
     public void getUserInfo(){
         String TAG = "getUserInfo()";
+
+        dbHelper = new JoinusDBHelper(this);
+
         UserApiClient.getInstance().me((user, meError) -> {
             if (meError != null) {
                 Log.e(TAG, "사용자 정보 요청 실패", meError);
@@ -82,7 +97,11 @@ public class Login_Activity extends AppCompatActivity {
                 name = user.getKakaoAccount().getProfile().getNickname();
                 // 로그인 성공 후 MainActivity로 전환하는 코드 추가
                 Intent intent = new Intent(Login_Activity.this, MainActivity.class);
-                intent.putExtra("name", name);
+                // todo : 이름 name 데이터베이스 저장
+                sqlDB = dbHelper.getWritableDatabase();
+                sqlDB.execSQL("INSERT INTO " + TableInfo_user.TABLE_1_NAME + " VALUES ( '" + name + "');");
+                sqlDB.close();
+                // intent.putExtra("name", name);
                 startActivity(intent);
                 finish(); // 현재 액티비티를 종료하여 뒤로 가기 버튼으로 다시 돌아오지 않도록 합니다.
             }
