@@ -101,7 +101,8 @@ public class GridAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
                 capture();
-                handleImageButtonClick(position, imgView);
+
+                //handleImageButtonClick(position, imgView);
                 if (onButtonClickListener != null) {
                     onButtonClickListener.onButtonClick(position); // 버튼 클릭 이벤트를 메인 액티비티로 전달
                 }
@@ -115,15 +116,16 @@ public class GridAdapter extends BaseAdapter {
         this.requestCode = requestCode;
     }
 
-    private void handleImageButtonClick(int position, ImageView imgView) {
+    void handleImageButtonClick(int position, int resource) {
 
-        imgView.setImageResource(R.drawable.icon_check_circle);
+        /* imgView.setImageResource(R.drawable.icon_check_circle);
         // 데이터베이스에 변경된 값을 반영
         sqlDB = dbHelper.getWritableDatabase();
         String updateQuery = "UPDATE " + TableInfo_user.TABLE_2_NAME + " SET " + imgViewSQL[position] + " = 1;";
         sqlDB.execSQL(updateQuery);
-        sqlDB.close();
-        // todo : 오늘의 목표 퍼센테이지 높이기
+        sqlDB.close(); */
+        imgViewIds[position] = resource;
+        notifyDataSetChanged(); // 데이터 변경을 어댑터에 알려 UI 업데이트
 
     }
 
