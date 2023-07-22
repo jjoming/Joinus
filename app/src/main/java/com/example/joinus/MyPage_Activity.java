@@ -22,6 +22,7 @@ public class MyPage_Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mypage);
 
+        //인플레이팅
         for (int i = 0; i < imgID.length; i++) {
             imgViews[i] = findViewById(imgID[i]);
         }
