@@ -15,17 +15,17 @@ public class JoinusDBHelper extends SQLiteOpenHelper {
     // todo : 2 생성 쿼리 테이블 수정
     public static final String SQL_CREATE_TABLE_2 =
             "CREATE TABLE " + TableInfo_user.TABLE_2_NAME + " (" +
-                    TableInfo_user.TABLE_2_COLUMN_NAME_GOAL + " TEXT DEFAULT '0', " +
-                    TableInfo_user.TABLE_2_COLUMN_NAME_BICYCLE + " TEXT DEFAULT '0', " +
-                    TableInfo_user.TABLE_2_COLUMN_NAME_LABEL + " TEXT DEFAULT '0', " +
-                    TableInfo_user.TABLE_2_COLUMN_NAME_BUS + " TEXT DEFAULT '0', " +
-                    TableInfo_user.TABLE_2_COLUMN_NAME_OFF + " TEXT DEFAULT '0', " +
-                    TableInfo_user.TABLE_2_COLUMN_NAME_SMARTPHONE + " TEXT DEFAULT '0', " +
-                    TableInfo_user.TABLE_2_COLUMN_NAME_TUMBLER + " TEXT DEFAULT '0', " +
-                    TableInfo_user.TABLE_2_COLUMN_NAME_MAIL + " TEXT DEFAULT '0', " +
-                    TableInfo_user.TABLE_2_COLUMN_NAME_BASKET + " TEXT DEFAULT '0', " +
-                    TableInfo_user.TABLE_2_COLUMN_NAME_LAUNDRY + " TEXT DEFAULT '0', " +
-                    TableInfo_user.TABLE_2_COLUMN_NAME_FOOD + " TEXT DEFAULT '0'" +
+                    TableInfo_user.TABLE_2_COLUMN_NAME_GOAL + " INTEGER DEFAULT 0, " +
+                    TableInfo_user.TABLE_2_COLUMN_NAME_BICYCLE + " INTEGER DEFAULT 0, " +
+                    TableInfo_user.TABLE_2_COLUMN_NAME_LABEL + " INTEGER DEFAULT 0, " +
+                    TableInfo_user.TABLE_2_COLUMN_NAME_BUS + " INTEGER DEFAULT 0, " +
+                    TableInfo_user.TABLE_2_COLUMN_NAME_OFF + " INTEGER DEFAULT 0, " +
+                    TableInfo_user.TABLE_2_COLUMN_NAME_SMARTPHONE + " INTEGER DEFAULT 0, " +
+                    TableInfo_user.TABLE_2_COLUMN_NAME_TUMBLER + " INTEGER DEFAULT 0, " +
+                    TableInfo_user.TABLE_2_COLUMN_NAME_MAIL + " INTEGER DEFAULT 0, " +
+                    TableInfo_user.TABLE_2_COLUMN_NAME_BASKET + " INTEGER DEFAULT 0, " +
+                    TableInfo_user.TABLE_2_COLUMN_NAME_LAUNDRY + " INTEGER DEFAULT 0, " +
+                    TableInfo_user.TABLE_2_COLUMN_NAME_FOOD + " INTEGER DEFAULT 0" +
                     ")";
     public static final String SQL_CREATE_TABLE_3 = "CREATE TABLE " + TableInfo_user.TABLE_3_NAME + " (" + TableInfo_user.TABLE_3_COLUMN_NAME_STAMP + " INTEGER)";
 

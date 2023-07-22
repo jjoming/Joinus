@@ -93,7 +93,6 @@ public class GridAdapter extends BaseAdapter {
         imgBtn.setImageResource(imgIds[position]);
 
         // 데이터베이스에서 해당 위치에 대한 값 가져오기
-        // todo : 만약에 sql data가 1일 경우 이미지 바꾸기
         imgView.setImageResource(imgViewIds[position]);
 
         // ImageButton에 OnClickListener 설정
@@ -117,16 +116,8 @@ public class GridAdapter extends BaseAdapter {
     }
 
     void handleImageButtonClick(int position, int resource) {
-
-        /* imgView.setImageResource(R.drawable.icon_check_circle);
-        // 데이터베이스에 변경된 값을 반영
-        sqlDB = dbHelper.getWritableDatabase();
-        String updateQuery = "UPDATE " + TableInfo_user.TABLE_2_NAME + " SET " + imgViewSQL[position] + " = 1;";
-        sqlDB.execSQL(updateQuery);
-        sqlDB.close(); */
         imgViewIds[position] = resource;
         notifyDataSetChanged(); // 데이터 변경을 어댑터에 알려 UI 업데이트
-
     }
 
     public void capture() {

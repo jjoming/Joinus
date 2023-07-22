@@ -51,7 +51,8 @@ public class MainActivity extends AppCompatActivity implements OnButtonClickList
     TextView percent;
     ProgressBar progressbar;
     int[] imgViewIds;
-    int goal;
+    String[] imgViewSQL;
+    int goal, stampNum, tf;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +87,7 @@ public class MainActivity extends AppCompatActivity implements OnButtonClickList
             }
         });
 
+
         user_name = findViewById(R.id.user_name);
         Intent inIntent = getIntent();
         //이름 데이터베이스에서 꺼내 표시
@@ -108,6 +110,13 @@ public class MainActivity extends AppCompatActivity implements OnButtonClickList
             per = cursor.getString(0);
         }
         percent.setText(per + "%");
+        //progress 업데이트
+        cursor = sqlDB.rawQuery("SELECT " + TableInfo_user.TABLE_2_COLUMN_NAME_GOAL + " FROM " + TableInfo_user.TABLE_2_NAME,null);
+        while (cursor.moveToNext()) {
+            goal = cursor.getInt(0);
+        }
+        cursor.close();
+        progressbar.setProgress(goal);
         goal = Integer.parseInt(per);
         sqlDB.close();
 
@@ -125,6 +134,7 @@ public class MainActivity extends AppCompatActivity implements OnButtonClickList
     public void onButtonClick(int position) {
         adapter.handleImageButtonClick(position, R.drawable.icon_check_circle);
         updatePercentage(); // 퍼센테이지 업데이트 메서드 호출
+
     }
 
     // 퍼센테이지 업데이트 메서드
@@ -133,9 +143,21 @@ public class MainActivity extends AppCompatActivity implements OnButtonClickList
         if (goal == 100) {
             percent.setText(goal + "%");
             progressbar.setProgress(goal);
+
+            sqlDB = dbHelper.getReadableDatabase();
+            Cursor cursor;
+            cursor = sqlDB.rawQuery("SELECT " + TableInfo_user.TABLE_3_COLUMN_NAME_STAMP + " FROM " + TableInfo_user.TABLE_3_NAME,null);
+            while (cursor.moveToNext()) {
+                stampNum = cursor.getInt(0);
+            }
+            cursor.close();
+
+            stampNum++;
+
             sqlDB = dbHelper.getWritableDatabase();
-            sqlDB.execSQL("INSERT INTO " + TableInfo_user.TABLE_3_NAME + " (" + TableInfo_user.TABLE_3_COLUMN_NAME_STAMP + ") VALUES (1);");
+            sqlDB.execSQL("INSERT INTO " + TableInfo_user.TABLE_3_NAME + " (" + TableInfo_user.TABLE_3_COLUMN_NAME_STAMP + ") VALUES (" + stampNum + ");");
             sqlDB.close();
+
         }
         else if (goal > 100) {
 
@@ -144,6 +166,9 @@ public class MainActivity extends AppCompatActivity implements OnButtonClickList
             percent.setText(goal + "%");
             progressbar.setProgress(goal);
         }
+        sqlDB = dbHelper.getWritableDatabase();
+        sqlDB.execSQL("INSERT INTO " + TableInfo_user.TABLE_2_NAME + " (" + TableInfo_user.TABLE_2_COLUMN_NAME_GOAL + ") VALUES (" + goal + ");");
+        sqlDB.close();
     }
 
     // 이미지 캡처 결과를 받아오는 메서드
