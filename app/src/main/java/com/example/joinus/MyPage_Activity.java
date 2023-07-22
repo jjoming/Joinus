@@ -58,10 +58,10 @@ public class MyPage_Activity extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MyPage_Activity.this, MainActivity.class);
-                startActivity(intent);
+                onBackPressed(); // 뒤로 가기 버튼 처리
             }
         });
 
     }
+
 }
