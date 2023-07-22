@@ -1,8 +1,11 @@
 package com.example.joinus;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -32,14 +35,18 @@ import java.util.Arrays;
 import java.util.List;
 import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
+    private static final int CAMERA_PERMISSION_REQUEST_CODE = 100;
     ImageButton myPage;
     GridView gridView;
     TextView user_name;
     JoinusDBHelper dbHelper;
     SQLiteDatabase sqlDB;
     String userN;
+
+    GridAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +90,36 @@ public class MainActivity extends AppCompatActivity {
 
         // gridView에 어댑터 설정
         gridView = findViewById(R.id.gridView);
-        GridAdapter adapter = new GridAdapter(MainActivity.this, imgBtnIds, imgViewIds);
+        adapter = new GridAdapter(MainActivity.this, imgBtnIds, imgViewIds);
         gridView.setAdapter(adapter);
+        int requestCode = 101;
+        adapter.setRequestCode(requestCode);
+    }
+
+    // 이미지 캡처 결과를 받아오는 메서드
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 101 && resultCode == Activity.RESULT_OK) {
+            // 캡처된 이미지 정보를 GridAdapter로 전달
+            adapter.setCapturedImage(data);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == CAMERA_PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // 카메라 권한이 허용된 경우, 다시 capture() 메서드를 호출하여 카메라 앱을 실행합니다.
+                adapter.capture();
+            } else {
+                // 카메라 권한이 거부된 경우, 사용자에게 권한이 필요하다는 안내 메시지를 표시할 수 있습니다.
+                // 필요에 따라 다른 조치를 취할 수도 있습니다.
+                Toast.makeText(this, "카메라 권한이 필요합니다.", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }

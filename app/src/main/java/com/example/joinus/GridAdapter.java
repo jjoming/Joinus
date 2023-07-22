@@ -1,8 +1,11 @@
 package com.example.joinus;
 
+import static androidx.core.app.ActivityCompat.startActivityForResult;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.hardware.Camera;
@@ -17,6 +20,9 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 import java.io.File;
 
 public class GridAdapter extends BaseAdapter {
@@ -25,10 +31,11 @@ public class GridAdapter extends BaseAdapter {
     int[] imgIds; // 이미지 버튼에 들어갈 그림의 아이디
     int[] imgViewIds; // 이미지뷰에 들어갈 그림의 아이디
     LayoutInflater inflater;
-
     File file;
-
-
+    ImageButton imgBtn;
+    ImageView imgView;
+    private int requestCode;
+    private static final int CAMERA_PERMISSION_REQUEST_CODE = 100;
 
     public GridAdapter(Context context, int[] imgIds, int[] imgViewIds) {
         this.context = context;
@@ -61,8 +68,8 @@ public class GridAdapter extends BaseAdapter {
             convertView = inflater.inflate(R.layout.grid_item, null);
         }
 
-        ImageButton imgBtn = convertView.findViewById(R.id.grid_btn);
-        ImageView imgView = convertView.findViewById(R.id.imgView); // 이미지뷰 인플레이트
+        imgBtn = convertView.findViewById(R.id.grid_btn);
+        imgView = convertView.findViewById(R.id.imgView); // 이미지뷰 인플레이트
 
         File sdcard = Environment.getExternalStorageDirectory();
         file = new File(sdcard, "capture.jpg");
@@ -77,34 +84,41 @@ public class GridAdapter extends BaseAdapter {
             public void onClick(View view) {
                 // todo : 카메라로 이동 후 확인 버튼 클릭시 체크표시로
                 capture();
-                handleImageButtonClick(position, imgView);
+                //handleImageButtonClick(position, imgView);
             }
         });
-
 
         return convertView;
     }
 
-    private void handleImageButtonClick(int position, ImageView imgView) {
+
+    public void setRequestCode(int requestCode) {
+        this.requestCode = requestCode;
+    }
+
+    private void handleImageButtonClick(ImageView imgView) {
         //
         imgView.setImageResource(R.drawable.icon_check_circle);
         // todo : 오늘의 목표 퍼센테이지 높이기
     }
 
-    public void capture(){
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
-        startActivityForResult(intent, 101);
+    public void capture() {
+        // 카메라 권한이 허용되었는지 확인합니다.
+        if (ContextCompat.checkSelfPermission(context, android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+            // 카메라 앱을 실행합니다.
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            if (context instanceof Activity) {
+                ((Activity) context).startActivityForResult(intent, requestCode);
+            }
+        } else {
+            // 카메라 권한이 허용되지 않은 경우 권한을 요청합니다.
+            ActivityCompat.requestPermissions((Activity) context, new String[]{android.Manifest.permission.CAMERA}, CAMERA_PERMISSION_REQUEST_CODE);
+        }
     }
 
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if(requestCode == 101  && resultCode == Activity.RESULT_OK){
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inSampleSize = 8;
-            Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath(), options);
-            imageView.setImageBitmap(bitmap);
+    public void setCapturedImage(Intent data) {
+        if (data != null && data.getExtras() != null) {
+            handleImageButtonClick(imgView);
         }
     }
 }
