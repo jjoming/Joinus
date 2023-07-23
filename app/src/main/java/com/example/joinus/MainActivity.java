@@ -139,36 +139,37 @@ public class MainActivity extends AppCompatActivity implements OnButtonClickList
 
     // 퍼센테이지 업데이트 메서드
     private void updatePercentage() {
-        if (goal == 100) {
+        if (goal < 100) {
             goal += 10;
-            percent.setText(goal + "%");
-            progressbar.setProgress(goal);
+            if (goal == 100) {
+                percent.setText(goal + "%");
+                progressbar.setProgress(goal);
 
-            sqlDB = dbHelper.getReadableDatabase();
-            Cursor cursor;
-            cursor = sqlDB.rawQuery("SELECT " + TableInfo_user.TABLE_3_COLUMN_NAME_STAMP + " FROM " +
-                    TableInfo_user.TABLE_3_NAME,null);
-            while (cursor.moveToNext()) {
-                stampNum = cursor.getInt(0);
+                sqlDB = dbHelper.getReadableDatabase();
+                Cursor cursor;
+                cursor = sqlDB.rawQuery("SELECT " + TableInfo_user.TABLE_3_COLUMN_NAME_STAMP + " FROM " +
+                        TableInfo_user.TABLE_3_NAME,null);
+                while (cursor.moveToNext()) {
+                    stampNum = cursor.getInt(0);
+                }
+                cursor.close();
+
+                stampNum++;
+
+                sqlDB = dbHelper.getWritableDatabase();
+                sqlDB.execSQL("INSERT INTO " + TableInfo_user.TABLE_3_NAME + " (" + TableInfo_user.TABLE_3_COLUMN_NAME_STAMP +
+                        ") VALUES (" + stampNum + ");");
+                sqlDB.close();
+
             }
-            cursor.close();
-
-            stampNum++;
-
-            sqlDB = dbHelper.getWritableDatabase();
-            sqlDB.execSQL("INSERT INTO " + TableInfo_user.TABLE_3_NAME + " (" + TableInfo_user.TABLE_3_COLUMN_NAME_STAMP +
-                    ") VALUES (" + stampNum + ");");
-            sqlDB.close();
-
+            else {
+                percent.setText(goal + "%");
+                progressbar.setProgress(goal);
+            }
         }
-        else if (goal > 100) {
 
-        }
-        else {
-            goal += 10;
-            percent.setText(goal + "%");
-            progressbar.setProgress(goal);
-        }
+
+
         sqlDB = dbHelper.getWritableDatabase();
         sqlDB.execSQL("INSERT INTO " + TableInfo_user.TABLE_2_NAME + " (" + TableInfo_user.TABLE_2_COLUMN_NAME_GOAL + ") VALUES (" + goal + ");");
         sqlDB.close();
