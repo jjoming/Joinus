@@ -8,10 +8,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.Toolbar;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.kakao.sdk.user.UserApiClient;
 
 public class MyPage_Activity extends AppCompatActivity {
 
@@ -19,6 +23,7 @@ public class MyPage_Activity extends AppCompatActivity {
     ImageView[] imgViews;
     int[] imgID = {R.id.img1, R.id.img2, R.id.img3, R.id.img4, R.id.img5, R.id.img6, R.id.img7, R.id.img8};
 
+    TextView logout;
     JoinusDBHelper dbHelper;
     SQLiteDatabase sqlDB;
     int stampNum;
@@ -62,6 +67,23 @@ public class MyPage_Activity extends AppCompatActivity {
             }
         });
 
+        logout = findViewById(R.id.textLogout2);
+
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UserApiClient.getInstance().logout(error -> {
+                    if (error != null) {
+                        // 로그아웃 실패 처리
+                        Toast.makeText(getApplicationContext(), "로그아웃 실패", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Intent intent = new Intent(MyPage_Activity.this, Login_Activity.class);
+                        startActivity(intent);
+                    }
+                    return null;
+                });
+            }
+        });
     }
 
 }
